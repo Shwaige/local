@@ -15,7 +15,7 @@ def email_send():
     receivers = ['chaxun@troodo.com']  # 接收者邮箱
 
     # 邮件正文
-    mail_content = '魔窟什么时候上线'  # 邮件正文内容
+    mail_content = '魔窟活动无异常可以上线'  # 邮件正文内容
     message = MIMEText(mail_content, 'plain', 'utf-8')  # 邮件正文格式
 
     # 邮件信息配置

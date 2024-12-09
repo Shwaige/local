@@ -1,23 +1,26 @@
 import time
 import pyautogui
-import pytespiyseract
+import pytesseract
 import pygetwindow as gw
 import cv2
+import numpy as np
 
-def select_and_operate_on_window(window_title, text_to_find):
-    # 查找并激活窗口
-    windows = gw.getWindowsWithTitle(window_title)
-    if not windows:
-        print(f'未找到标题包含 "{window_title}" 的窗口')
+
+def select_and_operate_on_window(window_title, text_to_find, index=0):
+    # 查找所有匹配的窗口
+    windows = [w for w in gw.getWindowsWithTitle(window_title) if w.title == window_title]
+
+    if len(windows) <= index:
+        print(f'未找到索引为 {index} 的窗口')
         return
 
-    window = windows[0]
+    window = windows[index]
     window.activate()
     time.sleep(1)  # 等待窗口激活
 
     # 截图窗口区域
     screenshot = pyautogui.screenshot(region=(window.left, window.top, window.width, window.height))
-    screenshot_cv = cv2.cvtColor(screenshot, cv2.COLOR_RGB2BGR)
+    screenshot_cv = cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
 
     # 使用 OCR 识别窗口中的文本
     text = pytesseract.image_to_string(screenshot_cv)
@@ -41,5 +44,9 @@ def select_and_operate_on_window(window_title, text_to_find):
     else:
         print(f'未找到文本 "{text_to_find}"')
 
-# 选择窗口并操作
-select_and_operate_on_window('Your Window Title', 'YourTextHere')
+
+# 选择第一个同名窗口并操作
+select_and_operate_on_window('KEmulator Lite v0.9.4', 'YourTextHere', index=0)
+
+# 选择第二个同名窗口并操作
+select_and_operate_on_window('KEmulator Lite v0.9.4', 'YourTextHere', index=1)
